@@ -1,16 +1,30 @@
 # multi_masked_formatter_example
 
-Demonstrates how to use the multi_masked_formatter plugin.
+![](MultiMaskedFormatter.gif)
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+```
+TextField(
+  inputFormatters: [
+    MultiMaskedTextInputFormatter(
+        masks: ['xxx-xxxx-xxxx', 'xxx-xxx-xxxx'], separator: '-')
+  ],
+  autofocus: true,
+  keyboardType: TextInputType.number,
+  decoration:
+      InputDecoration(
+        labelText: 'PhoneNumber',
+        hintText: '010-123-4567 or 010-1234-5678'),
+);
+  
+  
+TextField(
+  inputFormatters: [
+    MultiMaskedTextInputFormatter(
+        masks: ['xx.xx.xx', 'xxxx.xx.xx'], separator: '.')
+  ],
+  autofocus: true,
+  keyboardType: TextInputType.number,
+  decoration: InputDecoration(
+      labelText: 'Date of birth', hintText: '99.02.20 or 1999.02.20'),
+);
+```
