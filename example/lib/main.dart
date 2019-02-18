@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> {
                 autofocus: true,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                    labelText: 'Date of birth', hintText: '83.02.20 or 1983.02.20'),
+                    labelText: 'Date of birth', hintText: '99.02.20 or 1999.02.20'),
               ),
             ],
           ),

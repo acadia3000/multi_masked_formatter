@@ -61,16 +61,18 @@ class MultiMaskedTextInputFormatter extends TextInputFormatter {
           selection: TextSelection.collapsed(
             offset: resetValue.length,
           ));
-    } else {
-      if (newText.length < mask.length &&
-          mask[newText.length - 1] == _separator) {
-        return TextEditingValue(
-          text: '$oldText$_separator${newText.substring(newText.length - 1)}',
-          selection: TextSelection.collapsed(
-            offset: newText.length + 1,
-          ),
-        );
-      }
+    }
+
+    if (newText.length < mask.length &&
+        mask[newText.length - 1] == _separator) {
+      final text =
+          '$oldText$_separator${newText.substring(newText.length - 1)}';
+      return TextEditingValue(
+        text: text,
+        selection: TextSelection.collapsed(
+          offset: text.length,
+        ),
+      );
     }
 
     return newValue;
