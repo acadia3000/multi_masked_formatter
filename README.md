@@ -10,7 +10,7 @@ It is useful for entering phone numbers, date of birth.
 ### Dependency
 ```
 dependencies:
-  multi_masked_formatter: ^0.1.0
+  multi_masked_formatter: ^0.1.1
 ```
 
 ### Import
