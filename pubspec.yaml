@@ -1,6 +1,6 @@
 name: multi_masked_formatter
 description: Multple Masked TextInputFormatter Flutter plugin. It is useful for entering phone numbers, date of birth.
-version: 0.1.0
+version: 0.1.1
 author: Thomas Jeong<acadia3000@gmail.com>
 homepage: https://github.com/acadia3000/multi_masked_formatter
 
