@@ -1,6 +1,6 @@
 # multi_masked_formatter_example
 
-![](MultiMaskedFormatter.gif)
+![](../MultiMaskedFormatter.gif)
 
 ```
 TextField(
