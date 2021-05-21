@@ -5,7 +5,8 @@ author: Thomas Jeong<acadia3000@gmail.com>
 homepage: https://github.com/acadia3000/multi_masked_formatter
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.13.0 <3.0.0"
+  flutter: ">=1.20.0"
 
 dependencies:
   flutter:

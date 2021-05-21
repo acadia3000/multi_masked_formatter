@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:collection/collection.dart';
 
 class MultiMaskedTextInputFormatter extends TextInputFormatter {
-  List<String> _masks;
-  String _separator;
-  String _prevMask;
+  late final List<String>? _masks;
+  String? _separator;
+  String? _prevMask;
 
   MultiMaskedTextInputFormatter(
-      {@required List<String> masks, @required String separator}) {
+      {List<String>? masks, String? separator}) {
     _separator = (separator != null && separator.isNotEmpty) ? separator : null;
     if (masks != null && masks.isNotEmpty) {
       _masks = masks;
-      _masks.sort((l, r) => l.length.compareTo(r.length));
+      _masks!.sort((l, r) => l.length.compareTo(r.length));
       _prevMask = masks[0];
     }
   }
@@ -30,10 +31,10 @@ class MultiMaskedTextInputFormatter extends TextInputFormatter {
     }
 
     final pasted = (newText.length - oldText.length).abs() > 1;
-    final mask = _masks.firstWhere((value) {
-      final maskValue = pasted ? value.replaceAll(_separator, '') : value;
+    final mask = _masks?.firstWhereOrNull((m) {
+      final maskValue = pasted && _separator != null ? m.replaceAll(_separator!, '') : m;
       return newText.length <= maskValue.length;
-    }, orElse: () => null);
+    });
 
     if (mask == null) {
       return oldValue;
@@ -44,13 +45,13 @@ class MultiMaskedTextInputFormatter extends TextInputFormatter {
     _prevMask = mask;
 
     if (needReset) {
-      final text = newText.replaceAll(_separator, '');
+      final text = _separator != null ? newText.replaceAll(_separator!, '') : newText;
       String resetValue = '';
       int sep = 0;
 
       for (int i = 0; i < text.length; i++) {
         if (mask[i + sep] == _separator) {
-          resetValue += _separator;
+          resetValue += _separator!;
           ++sep;
         }
         resetValue += text[i];
