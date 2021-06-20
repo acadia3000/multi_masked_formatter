@@ -34,7 +34,7 @@ class MultiMaskedTextInputFormatter extends TextInputFormatter {
       String maskValue = value; 
       
       if(pasted) {
-        _separator.forEach((f) {
+        _separator.forEach((f) {          
           maskValue = maskValue.replaceAll(f, '');        
         });
       } 
@@ -80,21 +80,37 @@ class MultiMaskedTextInputFormatter extends TextInputFormatter {
           ));
     }
 
-    if (newText.length < mask.length &&
-        _separator.contains(mask[newText.length - 1])) {          
-      String text;
-      for(int i = 0; i < _separator.length; i++) {
-        if(_separator[i] == mask[newText.length - 1])          
-          text = '$oldText' + _separator[i] + '${newText.substring(newText.length - 1)}';
+    String cleanText = newText;
+
+    _separator.forEach((element) {
+      cleanText = cleanText.replaceAll(element, '');
+    });
+
+    if(newText.length < mask.length) {
+      
+      int index = 0;
+      int normalCount = 0;
+      String calcText = '';
+      while(index < mask.length) {
+        if(_separator.contains(mask[index]))
+          calcText += mask[index];
+        else {
+          calcText += cleanText[normalCount];
+          normalCount++;
+        }
+
+        index++;
+        if(normalCount == cleanText.length)
+          break;
       }
+
       return TextEditingValue(
-        text: text,
+        text: calcText,
         selection: TextSelection.collapsed(
-          offset: text.length,
+          offset: calcText.length,
         ),
       );
     }
-
     return newValue;
   }
 }
