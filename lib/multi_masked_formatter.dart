@@ -3,11 +3,11 @@ import 'package:flutter/services.dart';
 
 class MultiMaskedTextInputFormatter extends TextInputFormatter {
   List<String> _masks;
-  String _separator;
+  List<String> _separator;
   String _prevMask;
 
   MultiMaskedTextInputFormatter(
-      {@required List<String> masks, @required String separator}) {
+      {@required List<String> masks, @required List<String> separator}) {
     _separator = (separator != null && separator.isNotEmpty) ? separator : null;
     if (masks != null && masks.isNotEmpty) {
       _masks = masks;
@@ -31,7 +31,16 @@ class MultiMaskedTextInputFormatter extends TextInputFormatter {
 
     final pasted = (newText.length - oldText.length).abs() > 1;
     final mask = _masks.firstWhere((value) {
-      final maskValue = pasted ? value.replaceAll(_separator, '') : value;
+      String maskValue = value; 
+      
+      if(pasted) {
+        _separator.forEach((f) {          
+          maskValue = maskValue.replaceAll(f, '');        
+        });
+      } 
+      else 
+        maskValue = value;
+
       return newText.length <= maskValue.length;
     }, orElse: () => null);
 
@@ -44,14 +53,22 @@ class MultiMaskedTextInputFormatter extends TextInputFormatter {
     _prevMask = mask;
 
     if (needReset) {
-      final text = newText.replaceAll(_separator, '');
+      String text = newText; 
+      _separator.forEach((f) {
+        text = text.replaceAll(f, '');
+      });
       String resetValue = '';
       int sep = 0;
 
       for (int i = 0; i < text.length; i++) {
-        if (mask[i + sep] == _separator) {
-          resetValue += _separator;
-          ++sep;
+        if (_separator.contains(mask[i + sep])) {
+          _separator.forEach((f) {
+            if(f == mask[i+sep]) {
+              resetValue += f;
+              ++sep;
+            }
+
+          });          
         }
         resetValue += text[i];
       }
@@ -63,18 +80,37 @@ class MultiMaskedTextInputFormatter extends TextInputFormatter {
           ));
     }
 
-    if (newText.length < mask.length &&
-        mask[newText.length - 1] == _separator) {
-      final text =
-          '$oldText$_separator${newText.substring(newText.length - 1)}';
+    String cleanText = newText;
+
+    _separator.forEach((element) {
+      cleanText = cleanText.replaceAll(element, '');
+    });
+
+    if(newText.length < mask.length) {
+      
+      int index = 0;
+      int normalCount = 0;
+      String calcText = '';
+      while(index < mask.length) {
+        if(_separator.contains(mask[index]))
+          calcText += mask[index];
+        else {
+          calcText += cleanText[normalCount];
+          normalCount++;
+        }
+
+        index++;
+        if(normalCount == cleanText.length)
+          break;
+      }
+
       return TextEditingValue(
-        text: text,
+        text: calcText,
         selection: TextSelection.collapsed(
-          offset: text.length,
+          offset: calcText.length,
         ),
       );
     }
-
     return newValue;
   }
 }
